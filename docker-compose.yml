@@ -1,0 +1,29 @@
+version: '3'
+services:
+  laravel_app:
+    restart: always
+    build: ./
+    # command: npm start -- -L
+    working_dir: /usr/src/app
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./:/usr/src/app
+    networks: 
+      - backend
+  apache:
+    restart: always
+    build:
+      context: ./apache
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+     - laravel_app
+    networks: 
+    - backend
+networks:
+    backend:
+      driver: "bridge"
+volumes:
+  laravelDB:
